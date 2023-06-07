@@ -15,6 +15,50 @@ body {
     background-size: cover;
 }
 
+
+/* --- FONTS --- */
+@font-face {
+    font-family: 'Centaur';
+    src: url('/font/centaur-webfont.woff2') format('woff2'),
+    url('/font/centaur-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+/* Set root font size */
+html {
+    font-size: 2vh;
+}
+div#main {
+    font-family: 'Centaur', Times, serif;
+    font-size: 2.75rem;
+    font-weight: bold;
+}
+/* Stretch text vertically */
+div#main > p, h1, h2 { /* https://www.w3docs.com/snippets/css/how-to-stretch-a-text-with-css.html */
+    transform: scale(1, 1.62);
+    -webkit-transform: scale(1, 1.62);
+    -moz-transform: scale(1, 1.62);
+    -o-transform: scale(1, 1.62);
+    /*transform-origin: 0% 70%;*/
+}
+
+h1 {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+    font-size: 4rem;
+    /*font-size: 9vh;*/
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.3rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
 h1, h2 {
     margin: 0;
 }
@@ -33,4 +77,8 @@ a {
     -webkit-transform: translate(0, -50%);
     -ms-transform: translate(0, -50%);
     transform: translate(0, -50%);
+}
+
+a:hover {
+    color: #868686;
 }
