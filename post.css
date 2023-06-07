@@ -1,0 +1,58 @@
+body {
+
+    /* Background image styling */
+    /* https://css-tricks.com/perfect-full-page-background-image/, but expanded to allow for fallback color */
+    background-color: rgb(35, 35, 35);
+    background-image: url("/img/blog-background-3.png"); /* TODO: scale image more realistically */
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+#main {
+    text-align: left;
+}
+
+@font-face {
+    font-family: 'CenturySchoolbookRegular';
+    src: url('/font/century_schoolbook_std_regular-webfont.woff2') format('woff2'),
+    url('/font/century_schoolbook_std_regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+#main h1 {
+    font-family: "CenturySchoolbookRegular", Times, serif;
+    font-size: 3rem;
+    color: #232322;
+    background-color: #E98373;
+    display: inline-block;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: 5rem;
+}
+
+#post-body {
+    color: rgb(186,186, 186);
+    font-size: 1rem;
+    font-family: monospace;
+
+    background-color: rgba(35, 35, 34, .80);
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+
+#post-body a {
+    color: #03af5f;
+}
+
+#post-body a:hover {
+    color: #027c43;
+}
