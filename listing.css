@@ -82,7 +82,7 @@ nav > div > p, #sidebar h1, #sidebar h2 { /* https://www.w3docs.com/snippets/css
     /*background-color: 353534;*/
 }
 
-#sidebar { /* TODO: decide on background transparency / overlay to darken image. Where to put, and how much
+#sidebar { /* TODO: decide on background transparency / overlay to darken image. Where to put, and how much */
 
     background-color: rgba(35, 35, 34, 0.25);
     /*display: inline-block;*/
