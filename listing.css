@@ -3,7 +3,7 @@ body {
     /* Background image styling */
     /* https://css-tricks.com/perfect-full-page-background-image/, but expanded to allow for fallback color */
     background-color: rgb(35, 35, 35);
-    background-image: url("/img/kOOyWKp-DY-6720.avif"); /* TODO: scale image more realistically */
+    background-image: url("/img/blog-background-2.png"); /* TODO: scale image more realistically */
     background-position: center center;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -11,6 +11,56 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+}
+
+
+/* Fonts */
+@font-face {
+    font-family: 'CenturySchoolbookBold';
+    src: url('/font/century_schoolbook_std_bold-webfont.woff2') format('woff2'),
+    url('/font/century_schoolbook_std_bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'CenturySchoolbookRegular';
+    src: url('/font/century_schoolbook_std_regular-webfont.woff2') format('woff2'),
+    url('/font/century_schoolbook_std_regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'Centaur';
+    src: url('/font/centaur-webfont.woff2') format('woff2'),
+    url('/font/centaur-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+.post-subtitle {
+    font-family: "CenturySchoolbookRegular", Times, serif;
+    font-size: 2rem;
+}
+.post-title {
+    font-family: "CenturySchoolbookBold", Times, serif;
+    font-size: 3.5rem;
+}
+nav {
+    font-family: 'Centaur', Times, serif;
+    font-size: 2.75rem;
+    font-weight: bold;
+    /*font-stretch: 150%;*/
+}
+
+/* Stretch the sidebar text vertically */
+nav > div > p { /* https://www.w3docs.com/snippets/css/how-to-stretch-a-text-with-css.html */
+    transform: scale(1, 1.62);
+    -webkit-transform: scale(1, 1.62);
+    -moz-transform: scale(1, 1.62);
+    -o-transform: scale(1, 1.62);
+    /*transform-origin: 0% 70%;*/
 }
 
 
@@ -26,11 +76,21 @@ a {
 #sidebar, #sidebar a {
     color: rgb(186,	186, 186); /* TODO */
 }
+#sidebar a.current-page {
+    color: #00afff;
+}
+#sidebar a.current-page:hover {
+    color: #008bcc;
+}
+#sidebar a:hover {
+    color: #868686;
+}
+
 
 nav {
     /* vertical centering */
     position: absolute;
-    top: max(45%, 12rem); /* TODO, this prevents the main content form hitting the title, but the rem amount will need to be adjusted based on the final font size of the title*/
+    top: max(50%, 19rem); /* TODO, this prevents the main content form hitting the title, but the rem amount will need to be adjusted based on the final font size of the title*/
     -webkit-transform: translate(0, -50%);
     -ms-transform: translate(0, -50%);
     transform: translate(0, -50%);
@@ -63,7 +123,6 @@ nav > div { display: inline-block; text-align: left; }
 
 
 p.post-title {
-    font-weight: bold;
     margin: 0;
 }
 
