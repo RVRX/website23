@@ -65,3 +65,7 @@ p.post-title {
 p.post-subtitle {
     margin: 0.5em 0 0;
 }
+
+#main {
+    text-align: right;
+}

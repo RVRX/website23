@@ -1,7 +1,7 @@
 /* Create flex columns, align text within */
 body { display: flex; flex-direction: row; }
 #sidebar { width: 20%; }
-#main { width: 80%; text-align: right; }
+#main { width: 80%; }
 
 
 
