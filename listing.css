@@ -135,6 +135,7 @@ p.post-subtitle {
 /* Border Line*/
 #sidebar {
     border-right: solid rgb(186,186, 186);
+    border-width: 1px;
     height: 100vh;
 }
 
