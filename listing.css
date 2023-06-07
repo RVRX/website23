@@ -55,7 +55,7 @@ nav {
 }
 
 /* Stretch the sidebar text vertically */
-nav > div > p { /* https://www.w3docs.com/snippets/css/how-to-stretch-a-text-with-css.html */
+nav > div > p, #sidebar h1, #sidebar h2 { /* https://www.w3docs.com/snippets/css/how-to-stretch-a-text-with-css.html */
     transform: scale(1, 1.62);
     -webkit-transform: scale(1, 1.62);
     -moz-transform: scale(1, 1.62);
