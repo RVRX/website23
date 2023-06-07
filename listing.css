@@ -16,8 +16,8 @@ body {
 
 /* Create flex columns, align text within */
 body { display: flex; flex-direction: row; }
-#sidebar { width: 30%; }
-#main { width: 70%; text-align: right; }
+#sidebar { width: 20%; }
+#main { width: 80%; text-align: right; }
 
 a {
     text-decoration: none;
@@ -35,6 +35,15 @@ nav {
     -ms-transform: translate(0, -50%);
     transform: translate(0, -50%);
 }
+
+#sidebar {
+    text-align: center;
+}
+
+
+/* horizontal centering of sidebar links */
+nav { width: 20%; }
+nav > div { display: inline-block; text-align: left; }
 
 
 
@@ -63,3 +72,11 @@ p.post-subtitle {
     margin: 0.5em 0 0;
 }
 
+
+/* Border Line*/
+#sidebar {
+    border-right: solid rgb(186,186, 186);
+    height: 100vh;
+}
+
+body {margin:0;padding:0;}
