@@ -77,20 +77,20 @@ nav {
     transform: translate(0, -50%);
 }
 
-#sidebar {
+#sticky-sidebar {
     text-align: center;
 }
 
 
 /* horizontal centering of sidebar links */
-nav { width: 20%; }
+nav { width: 100%; }
 nav > div { display: inline-block; text-align: left; }
 
 
 /* Border Line*/
 #sidebar {
-    border-right: solid rgb(186,186, 186);
-    border-width: 1px;
+    /*border-right: solid rgb(186,186, 186);*/
+    /*border-width: 1px;*/
     height: 100vh;
 }
 
@@ -98,17 +98,25 @@ body {margin:0;padding:0;}
 
 #sidebar { /* TODO: decide on background transparency / overlay to darken image. Where to put, and how much */
 
-    background-color: rgba(35, 35, 34, 0.25);
+    /*background-color: rgba(35, 35, 34, 0.25);*/
     /*display: inline-block;*/
+}
+
+#sticky-sidebar {
+    position: fixed;
+    background-color: rgba(35, 35, 34, 0.25);
+    border-right: solid rgb(186,186, 186) 1px; height: 100%; width: 20%;
 }
 
 
 /* Smaller Screens */
 @media (max-width: 60rem) {
     body { display: flex; flex-direction: column; }
-    #sidebar { border-right: none; border-bottom: solid rgb(186,186, 186) 1px; height: 100%; width: auto}
+
+    #sticky-sidebar { border-right: none; border-bottom: none; height: auto; width: auto; position: inherit; background: none;}
+    #sidebar { border-right: none; border-bottom: solid rgb(186,186, 186) 1px; height: 100%; width: auto; background-color: rgba(35, 35, 34, 0.25);}
     /*#sidebar { width: 0; height: 0; border: none;  visibility: hidden}*/
-    #sidebar > nav { visibility: hidden; width: 0; height: 0;}
+    #sidebar > #sticky-sidebar > nav { visibility: hidden; width: 0; height: 0;}
     #main { width: 100%; text-align: right; }
 
 }
