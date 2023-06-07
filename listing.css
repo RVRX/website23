@@ -1,0 +1,65 @@
+body {
+
+    /* Background image styling */
+    /* https://css-tricks.com/perfect-full-page-background-image/, but expanded to allow for fallback color */
+    background-color: rgb(35, 35, 35);
+    background-image: url("/img/kOOyWKp-DY-6720.avif"); /* TODO: scale image more realistically */
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+/* Create flex columns, align text within */
+body { display: flex; flex-direction: row; }
+#sidebar { width: 30%; }
+#main { width: 70%; text-align: right; }
+
+a {
+    text-decoration: none;
+}
+
+#sidebar, #sidebar a {
+    color: rgb(186,	186, 186); /* TODO */
+}
+
+nav {
+    /* vertical centering */
+    position: absolute;
+    top: max(45%, 12rem); /* TODO, this prevents the main content form hitting the title, but the rem amount will need to be adjusted based on the final font size of the title*/
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+}
+
+
+
+/* display posts inline so the background stays only near text */
+.post-container {
+    display: inline-block;
+    padding-right: 0.25em;
+}
+
+.post {
+    padding: 1em 0;
+}
+
+.post a {
+    color: #232323;
+}
+
+
+p.post-title {
+    font-weight: bold;
+    margin: 0;
+}
+
+
+p.post-subtitle {
+    margin: 0.5em 0 0;
+}
+
