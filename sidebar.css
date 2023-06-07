@@ -101,3 +101,14 @@ body {margin:0;padding:0;}
     background-color: rgba(35, 35, 34, 0.25);
     /*display: inline-block;*/
 }
+
+
+/* Smaller Screens */
+@media (max-width: 60rem) {
+    body { display: flex; flex-direction: column; }
+    #sidebar { border-right: none; border-bottom: solid rgb(186,186, 186) 1px; height: 100%; width: auto}
+    /*#sidebar { width: 0; height: 0; border: none;  visibility: hidden}*/
+    #sidebar > nav { visibility: hidden; width: 0; height: 0;}
+    #main { width: 100%; text-align: right; }
+
+}
