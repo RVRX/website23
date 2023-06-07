@@ -31,14 +31,6 @@ body {
     font-style: normal;
 
 }
-@font-face {
-    font-family: 'Centaur';
-    src: url('/font/centaur-webfont.woff2') format('woff2'),
-    url('/font/centaur-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-
-}
 .post-subtitle {
     font-family: "CenturySchoolbookRegular", Times, serif;
     font-size: 2rem;
@@ -47,88 +39,6 @@ body {
     font-family: "CenturySchoolbookBold", Times, serif;
     font-size: 3.5rem;
 }
-nav {
-    font-family: 'Centaur', Times, serif;
-    font-size: 2.75rem;
-    font-weight: bold;
-    /*font-stretch: 150%;*/
-}
-
-/* Stretch the sidebar text vertically */
-nav > div > p, #sidebar h1, #sidebar h2 { /* https://www.w3docs.com/snippets/css/how-to-stretch-a-text-with-css.html */
-    transform: scale(1, 1.62);
-    -webkit-transform: scale(1, 1.62);
-    -moz-transform: scale(1, 1.62);
-    -o-transform: scale(1, 1.62);
-    /*transform-origin: 0% 70%;*/
-}
-
-/* Remove padding/margin from h1 & h2 in sidebar */
-#sidebar h1, #sidebar h2 {
-    padding: 0;
-    margin: 0 0 0.25rem;
-}
-
-#sidebar h1 {
-    margin-top: 0.75rem;
-    font-size: 4rem;
-    font-weight: bold;
-}
-#sidebar h2 {
-    font-size: 1.3rem;
-    font-weight: normal;
-    text-transform: uppercase;
-    font-weight: bold;
-    /*background-color: 353534;*/
-}
-
-#sidebar { /* TODO: decide on background transparency / overlay to darken image. Where to put, and how much */
-
-    background-color: rgba(35, 35, 34, 0.25);
-    /*display: inline-block;*/
-}
-
-
-/* Create flex columns, align text within */
-body { display: flex; flex-direction: row; }
-#sidebar { width: 20%; }
-#main { width: 80%; text-align: right; }
-
-a {
-    text-decoration: none;
-}
-
-#sidebar, #sidebar a {
-    color: rgb(186,	186, 186); /* TODO */
-}
-#sidebar a.current-page {
-    color: #00afff;
-}
-#sidebar a.current-page:hover {
-    color: #008bcc;
-}
-#sidebar a:hover {
-    color: #868686;
-}
-
-
-nav {
-    /* vertical centering */
-    position: absolute;
-    top: max(50%, 21rem); /* TODO, this prevents the main content form hitting the title, but the rem amount will need to be adjusted based on the final font size of the title*/
-    -webkit-transform: translate(0, -50%);
-    -ms-transform: translate(0, -50%);
-    transform: translate(0, -50%);
-}
-
-#sidebar {
-    text-align: center;
-}
-
-
-/* horizontal centering of sidebar links */
-nav { width: 20%; }
-nav > div { display: inline-block; text-align: left; }
 
 
 
@@ -155,13 +65,3 @@ p.post-title {
 p.post-subtitle {
     margin: 0.5em 0 0;
 }
-
-
-/* Border Line*/
-#sidebar {
-    border-right: solid rgb(186,186, 186);
-    border-width: 1px;
-    height: 100vh;
-}
-
-body {margin:0;padding:0;}
