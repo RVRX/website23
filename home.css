@@ -1,7 +1,18 @@
 body {
     text-align: center;
-    background-color: gray; /* TODO */
-    color: lightgray; /* TODO */
+    color: rgb(186,	186, 186); /* TODO */
+
+    /* Background image styling */
+    /* https://css-tricks.com/perfect-full-page-background-image/, but expanded to allow for fallback color */
+    background-color: rgb(35, 35, 35);
+    background-image: url("img/7IKpeXVMhh-6101.avif"); /* TODO: scale image more realistically */
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 h1, h2 {
@@ -18,7 +29,6 @@ a {
     width: 100%;
     position: absolute;
     top: max(45%, 10rem); /* TODO, this prevents the main content form hitting the title, but the rem amount will need to be adjusted based on the final font size of the title*/
-    /*top: 45%;*/
     left: 0;
     -webkit-transform: translate(0, -50%);
     -ms-transform: translate(0, -50%);
