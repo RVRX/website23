@@ -40,7 +40,7 @@ div#sidebar, div#main {
     margin-left: 5rem;
 }
 
-#post-body {
+#post-body, #post-metadata {
     color: rgb(186,186, 186);
     font-size: 1rem;
     font-family: monospace;
@@ -59,21 +59,36 @@ div#sidebar, div#main {
 }
 
 
-#post-body a {
+#post-body a, #post-metadata a {
     color: #03af5f;
 }
 
-#post-body a:hover {
+#post-body a:hover, #post-metadata a {
     color: #027c43;
 }
 
 
-/* post specific stuff*/
-#main  h2.subtitle {
+#post-metadata {
+    margin-left: 1rem;
     display: inline-block;
-    background-color: #E98373;
+    /*background-color: rgba(35, 35, 34, .90);*/
+    /*color: #bababa;*/
+    /*padding-left: 1rem;*/
+    /*padding-right: 1rem;*/
+    margin-bottom: 1rem;
 }
 
-.post-metadata {
-    color: #bababa;
+#post-metadata > h2 {
+    font-style: italic;
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-inline-size: 100%;
+    block-size: auto;
+    height: auto;
+
+    /*filter: drop-shadow(0 10px 4px #4444dd);*/
+    filter: drop-shadow(0 10px 4px rgba(0, 0, 0, 0.5));
 }
