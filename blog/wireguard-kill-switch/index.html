@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Post - Example</title>
+
+  <link href="/sidebar.css" rel="stylesheet">
+  <link href="/post.css" rel="stylesheet">
+  <link href="/prismjs/prism.css" rel="stylesheet">
+  <style>code[class*="language-"]:not(pre code[class*="language-"]) {line-height: normal}</style> <!-- Override weird line-height from prisim-js -->
+</head>
+<body>
+<div id="sidebar">
+  <div id="sticky-sidebar">
+    <h1>RVRX</h1>
+    <h2>Cole Manning</h2>
+    <nav>
+      <div>
+        <p><a href="/blog" class="current-page">blog</a></p>
+        <p><a href="/work.html">work</a></p>
+        <p><a href="/resume.html">resum&eacute;</a></p>
+        <p><a href="/about.html">about</a><p>
+      </div>
+    </nav>
+  </div>
+</div>
+<div id="main">
+  <div class="post">
+    <h1 style="background-color: #8CA07E">WireGuard Kill-Switch</h1>
+    <div id="post-body">
+      <h2 id="intro-and-setting-up-wireguard" tabindex="-1">Intro, and Setting Up WireGuard <a class="header-anchor" href="#intro-and-setting-up-wireguard">#</a></h2>
+      <p>This is a guide on setting up a Kill-Switch for WireGuard on Linux, covering some niche network cases. The server used to test this was running Ubuntu 22.04.</p>
+      <p>If you are instead looking to setup, or have not setup WireGuard, I'd recommend this tutorial by Mullvad: <a href="https://mullvad.net/en/help/easy-wireguard-mullvad-setup-linux/">WireGuard on Linux terminal (easy)</a>.</p>
+      <blockquote>
+<!--        <p>When tinkinering, make sure you know how to undo any commands typed into the <code>PostUp</code> and <code>PreDown</code> sections of your Wiregaurd config! If you typed something wrong and the tunnel connection cannot complete it will leave the config file half-run, without having yet called the PreDown commands. <code>iptables -S</code> and <code>-D</code> are your friend.-->
+<!--          {.is-danger}</p>-->
+      </blockquote>
+      <h2 id="the-kill-switch" tabindex="-1">The 'Kill-Switch' <a class="header-anchor" href="#the-kill-switch">#</a></h2>
+      <p>As Wiregaurd defines it, a kill-switch is used to prevent the flow of unencrypted packets through the non-WireGuard interfaces on your device. You might see this option when downloading your WireGuard config from <a href="https://mullvad.net/en">Mullvad</a>, and <a href="https://www.ivpn.net/knowledgebase/linux/linux-wireguard-kill-switch/">IVPN has a tutorial</a> explaining how to modify a config to implement a kill-switch.</p>
+      <p>Well someone copied somebody's homework, as they both apply the exact same modification to your WireGuard config (<code class="language-bash">/etc/wireguard/*.conf</code>), as do many other sources on the internet:</p>
+      <pre  class="line-numbers"><code class="language-bash">PostUp  =  iptables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT && ip6tables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
+PreDown = iptables -D OUTPUT ! -o %i -m mark ! --mark $(wg show  %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT && ip6tables -D OUTPUT ! -o %i -m mark ! --mark $(wg show  %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT</code></pre>
+      <p>These lines should be added after the [Interface] section, but before and [Peer] section of your config. As it turns out, the first chunk of each line above is lifted directly from the <code>wg-quick</code> man page, and the second half is an addition to make the kill-switch work over IPv6 via <code>ip6tables</code>.</p>
+      <p>Let's break down the important parts of this kill-switch here...</p>
+      <ol>
+        <li>First we have <code class="language-">PostUp</code> and <code class="language-">PreDown</code> at the start of each line. Pretty simple, those define script snippets to be executed by bash after the wg tunnel is brought up, and before it tears down respectively.</li>
+        <li><code class="language-">iptables -I</code> inserts a rule, with <code class="language-">iptables -D</code> deleting the rule.</li>
+        <li>The rules are for outbound (<code class="language-">OUTPUT</code>) connections.</li>
+        <li><code class="language-">! -o %i</code> Applies the rule to all network interfaces, except the WG tunnel's interface. <code class="language-">wg-quick</code> handily expands <code class="language-">%i</code> to the interface for this config file (usually the name of the file, so <code class="language-">wg0.conf</code> would correspond to the <code class="language-">wg0</code> interface.</li>
+        <li><code class="language-">! --dst-type LOCAL</code> Applies the rule to all network traffic except &quot;LOCAL&quot;. That is, an address that is local to the host we are working on. 127.0.0.1 for example. This <strong>does not include other LAN IPs</strong>.</li>
+      </ol>
+      <p>So what have we done by adding this to our config? Effectively, if the connection to the VPN server ever drops, these iptable rules will prevent traffic from going through any of the other interfaces. A super handy feature, but it has some rather annoying unintended consequences.</p>
+      <h2 id="unintended-consequences" tabindex="-1">Unintended Consequences <a class="header-anchor" href="#unintended-consequences">#</a></h2>
+      <p>If you are SSH'ed into a machine when you start up a tunnel with these rules set, your terminal will stop responding. Why? Well you just told your server that it isn't able to talk to you anymore, as you are not connected to the server through the WireGuard tunnel's network interface. The fix? Well it depends on your network architecture...</p>
+      <h3 id="for-most-iptables-rule-exception" tabindex="-1">For Most: IPtables rule exception <a class="header-anchor" href="#for-most-iptables-rule-exception">#</a></h3>
+      <p>If you are most people you <em><strong>should be able to</strong></em> just change the kill-switch lines to include an exception for your local IP. This is done by adding <code>! -d 10.0.0.0/24</code> just before the <code>-j Reject</code> in the iptables command (where the IP/Mask is your local subnet). Just like the <code>! --dst-type LOCAL</code> indicated not (!) to include localhost IPs in the rule, this adds an exception for destination in the specified IP/subnet.</p>
+      <p>Like so:</p>
+      <pre><code class="language-">PostUp = iptables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL ! -d 10.0.0.0/24 -j REJECT &amp;&amp; ip6tables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
+PostDown = iptables -D OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL ! -d 10.0.0.0/24 -j REJECT &amp;&amp; ip6tables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
+</code></pre>
+      <p>But, as I said earlier, this won't work for everyone.</p>
+      <h3 id="what-about-if-i-have-multiple-subnets-more-iptables-rules" tabindex="-1">What about if I have multiple subnets?: More iptables rules! <a class="header-anchor" href="#what-about-if-i-have-multiple-subnets-more-iptables-rules">#</a></h3>
+      <p>If you are like me and have different subnets, you will run into even more issues with this setup. Lucky us!</p>
+      <p>I ran into this issue as I am running a VPN into my LAN to allow for access to my devices when away. Now this shouldn't cause an issue for you unless devices connected to your home VPN are put on a different subnet, but this is pretty common for security reasons.</p>
+      <h4 id="the-fix" tabindex="-1">The Fix... <a class="header-anchor" href="#the-fix">#</a></h4>
+      <p>So, for whatever reason, you've got multiple subnets, and once you turn on the tunnel with the kill-switch, you can no longer talk to devices on the other subnet. Why? As I understand it (and I might not), if <code>AllowedIPs</code> in your config is set to all IPs (<code>0.0.0.0/0, ::/0</code>) then when you try and talk to a device on your LAN, but on a different subnet, the WireGuard interface will try and send this off to the remote VPN server, where it obviously will not find what it is looking for.</p>
+      <h4 id="part-1-adding-ip-route" tabindex="-1">Part 1: Adding IP Route <a class="header-anchor" href="#part-1-adding-ip-route">#</a></h4>
+      <p>The fix however, I am more confident on. First off, the gateway to the other subnets must be added to the machine's routing table. This will follow the syntax:</p>
+      <pre><code class="language-">PreUp = ip route add [Subnet/Mask] via [Gateway IP] dev [normal, non wg interface]
+PreDown = ip route del [Subnet/Mask] via [Gateway IP] dev [normal, non wg interface]
+</code></pre>
+      <p>This should go <strong>BEFORE</strong> the kill-switch PreUp.</p>
+      <p>So if your machine is on the <code>10.0.2.0/24</code> subnet, normally uses the interface <code>ens18</code> (check <code>ip a</code> for your default interface) and you want to be able to access devices on the <code>10.0.1.0/24</code> subnet, you would need to tell the OS to  add <code>ip route add 10.0.1.0/24 via 10.0.2.1 dev ens18</code>.</p>
+      <h4 id="part-2-adding-iptables-exception" tabindex="-1">Part 2: Adding iptables exception <a class="header-anchor" href="#part-2-adding-iptables-exception">#</a></h4>
+      <p>Now your machine knows how to access these other subnets, but the iptables kill-switch in our config is still going to prevent us from talking to other devices over interfaces other than our WireGuard one. The fix for this is, well, to override those rules. The syntax follows:</p>
+      <pre><code class="language-">PostUp = iptables -I OUTPUT -d [subnet/mask] -j ACCEPT
+PostDown = iptables -D OUTPUT -d [subnet/mask] -j ACCEPT
+</code></pre>
+      <p>This should go <strong>AFTER</strong> the kill-switch.</p>
+      <p><em>Make sure to <strong>not add an iptables rule to accept connections sourced from the server connecting to the VPN</strong></em>. You will be effectively overriding the kill-switch** by saying 'if the source is this subnet', it can speak over the regular interface, as the machine itself is a device on this subnet.*</p>
+      <p>The final config will look something like:</p>
+      <pre><code class="language-">[Interface]
+...
+
+
+# Add route to gateway so the server knows how to access IPs outside of its subnet
+# This section has to come before the kill-switch!
+## 10.0.1.1 gateway can be accessed through 10.0.2.1
+PostUp = ip route add 10.0.1.0/24 via 10.0.2.1 dev ens18
+PostDown = ip route del 10.0.1.0/24 via 10.0.2.1 dev ens18
+## 192.168.3.1 gateway can be accessed through 10.0.2.1
+PostUp = ip route add 192.168.3.0/24 via 10.0.2.1 dev ens18
+PostDown = ip route del 192.168.3.0/24 via 10.0.2.1 dev ens18
+
+# Killswitch, prevent all interfaces except wg
+PostUp  =  iptables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT &amp;&amp; ip6tables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
+PreDown = iptables -D OUTPUT ! -o %i -m mark ! --mark $(wg show  %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT &amp;&amp; ip6tables -D OUTPUT ! -o %i -m mark ! --mark $(wg show  %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
+
+# Add firewall rule to allow access to LAN subnets
+## Allow outbound to 10.0.1.0 - 10.0.1.255 subnet (primary)
+PostUp = iptables -I OUTPUT -d 10.0.1.0/24 -j ACCEPT
+PreDown = iptables -D OUTPUT -d 10.0.1.0/24 -j ACCEPT
+## Allow outbound to 192.168.3.0 - 192.158.3.255 subnet (LAN VPN users)
+PostUp = iptables -I OUTPUT -d 192.168.3.0/24 -j ACCEPT
+PreDown = iptables -D OUTPUT -d 192.168.3.0/24 -j ACCEPT
+
+
+[Peer]
+...
+AllowedIPs = 0.0.0.0/0, ::/0
+...
+</code></pre>
+      <p>Now obviously everyone's setup and subnets are a little different, and you will likely have some changes to make to the above. Note my server here is on the <code>10.0.2.X</code> subnet, so it's gateway is <code>10.0.2.1</code>.</p>
+      <h2 id="caveats-of-even-the-best-of-kill-switches" tabindex="-1">Caveats of even the best of kill-switches <a class="header-anchor" href="#caveats-of-even-the-best-of-kill-switches">#</a></h2>
+      <p>Kill-switches are not the end-all be-all. There are a few more steps I'd recommend to make your setup whole.</p>
+      <p>First-off, and the most common, is <strong>interface binding</strong>. Many applications and services offer the ability to bind to a specific interface. That's very handy in our case because our WireGuard interface doesn't even exist when the tunnel is not up, and our kill-switch covers the case where it is up, but not connected. Really. Run <code>ip a</code> before and after connecting to a WireGuard VPN.</p>
+      <p>The other feature I'd recommend making use of is enabling WireGuard to start automatically on boot. To do this, run the following command, replacing <code>wg0</code> with your config name: <code>systemctl enable wg-quick@wg0</code>. Then, If you then have any other systemd services that start automatically, add <code>wg-quick@wg0</code> to the tasks <code>After=</code> section. Check out the systemd man-page or a guide for more info there.</p>
+      <h2 id="see-also-references" tabindex="-1">See Also / References <a class="header-anchor" href="#see-also-references">#</a></h2>
+      <ul>
+        <li><code>iptables</code> manpage</li>
+        <li><code>wg</code> manpage</li>
+        <li><code>wg-quick</code> manpage</li>
+          <li><a href="https://www.procustodibus.com/blog/2021/03/wireguard-allowedips-calculator/">https://www.procustodibus.com/blog/2021/03/wireguard-allowedips-calculator/</a></li>
+          <li><a href="https://www.reddit.com/r/WireGuard/comments/yy9hde/ssh_into_machine_from_lan_stops_working_when/">https://www.reddit.com/r/WireGuard/comments/yy9hde/ssh_into_machine_from_lan_stops_working_when/</a></li>
+          <li><a href="https://www.reddit.com/r/WireGuard/comments/auuvn5/problem_excluding_private_networks_in_allowedips/">https://www.reddit.com/r/WireGuard/comments/auuvn5/problem_excluding_private_networks_in_allowedips/</a></li>
+        <li><a href="https://mullvad.net/en/help/easy-wireguard-mullvad-setup-linux/">https://mullvad.net/en/help/easy-wireguard-mullvad-setup-linux/</a></li>
+        <li><a href="https://serverfault.com/questions/163111/allow-traffic-to-from-specific-ip-with-iptables">https://serverfault.com/questions/163111/allow-traffic-to-from-specific-ip-with-iptables</a></li>
+        <li><a href="https://www.digitalocean.com/community/tutorials/how-to-list-and-delete-iptables-firewall-rules">https://www.digitalocean.com/community/tutorials/how-to-list-and-delete-iptables-firewall-rules</a></li>
+        <li><a href="https://airvpn.org/forums/topic/50601-kill-switch-settings-for-wireguard-on-ubuntu-20/">https://airvpn.org/forums/topic/50601-kill-switch-settings-for-wireguard-on-ubuntu-20/</a></li>
+      </ul>
+      <p><em>I call this section &quot;See Also&quot; but really its just &quot;See What Websites My Firefox History Says I Visited When Debugging This Also&quot;</em></p>
+
+<!--      <div class="links-nextprev"><p>Previous: <a href="/blog/techno-ambiance/">Techno Ambiance</a></p>-->
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/prismjs/prism.js"></script>
+</body>
+</html>
