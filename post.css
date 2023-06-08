@@ -41,11 +41,17 @@ body {
     font-size: 1rem;
     font-family: monospace;
 
-    background-color: rgba(35, 35, 34, .80);
+    background-color: rgba(35, 35, 34, .90);
     margin-left: 1rem;
     margin-right: 1rem;
     padding-right: 1rem;
     padding-left: 1rem;
+
+    max-width: 70ch;
+    line-height: 1.25;
+
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 
