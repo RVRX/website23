@@ -13,6 +13,10 @@ body {
     background-size: cover;
 }
 
+div#sidebar, div#main {
+    /*background-color: rgba(35, 35, 34, .75);*/
+}
+
 #main {
     text-align: left;
 }
@@ -61,4 +65,15 @@ body {
 
 #post-body a:hover {
     color: #027c43;
+}
+
+
+/* post specific stuff*/
+#main  h2.subtitle {
+    display: inline-block;
+    background-color: #E98373;
+}
+
+.post-metadata {
+    color: #bababa;
 }
