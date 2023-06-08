@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Techno Ambiance</title>
+
+    <link href="/sidebar.css" rel="stylesheet">
+    <link href="/post.css" rel="stylesheet">
+    <link href="/prismjs/prism.css" rel="stylesheet">
+    <style>code[class*="language-"]:not(pre code[class*="language-"]) {line-height: normal}</style> <!-- Override weird line-height from prisim-js -->
+</head>
+<body>
+<div id="sidebar">
+    <div id="sticky-sidebar">
+        <h1>RVRX</h1>
+        <h2>Cole Manning</h2>
+        <nav>
+            <div>
+                <p><a href="/blog" class="current-page">blog</a></p>
+                <p><a href="/work.html">work</a></p>
+                <p><a href="/resume.html">resum&eacute;</a></p>
+                <p><a href="/about.html">about</a><p>
+            </div>
+        </nav>
+    </div>
+</div>
+<div id="main">
+    <div class="post">
+        <h1 style="background-color: #b3aed3">Techno Ambiance</h1>
+        <div id="post-body">
+            <p><strong>Techno Ambiance</strong> was a joint-venture audio-visual performance between <a href="https://soundcloud.com/positivekush"><em><strong>usnul</strong></em></a> (as DJ) and me, <em><strong>RVRX</strong></em> (on visuals), hosted by <a href="https://www.instagram.com/wwpiradioclub">WWPI Radio</a>. Credit to <em>usnul</em> for coming up with the idea of the performance and tagging me in for visuals. The VIPs of the show, however, were the stage spanning LED wall above us and the short-throw projector at our flank -- it was my goal to fill these with audio-reactive visuals.</p>
+            <p><picture><source type="image/avif" srcset="hTQq1j_WfD-868.avif 868w"><source type="image/webp" srcset="hTQq1j_WfD-868.webp 868w"><img alt="Event Flyer" loading="lazy" decoding="async" src="hTQq1j_WfD-868.png" width="868" height="1228"></picture></p>
+            <h2 id="touchdesigner" tabindex="-1">TouchDesigner <a class="header-anchor" href="#touchdesigner">#</a></h2>
+            <p>My weapon of choice for this undertaking was <a href="https://derivative.ca">TouchDesigner</a>, a node-based editor for live visuals. TD isn't an After Effects-esque 'create a render pipeline and export to a file'-type program, but instead a live I/O experience, seemingly used most often in live installations and performances.</p>
+            <p>Huge credit to <a href="http://elekktronaut.com/">Elekktronaut</a> (the king of TD how-tos) and his getting started series of tutorials for allowing me to speedrun learning this software in 30-days.</p>
+            <p>My intention with TD was to take the audio from <strong>unsul</strong>'s set and pipe it into responsive visuals, just like your audio visualizers of old, but cooler (and less GPU friendly). And well, I think I managed to do figure something out:</p>
+            <h3 id="outrun-matrix-walls-toe" tabindex="-1">'Outrun-Matrix-Walls.toe' <a class="header-anchor" href="#outrun-matrix-walls-toe">#</a></h3>
+            <p>Two parallel wireframe planes, a FOV bouncing between 0-160 to create a zoom-in/zoom-out effect, a bit of glow, and a twirl distortion mapped to the beat.</p>
+            <img src="matrix-panels.gif" loading="lazy" alt="">
+            <h3 id="pixel-relocator-eclipse-toe" tabindex="-1">'Pixel-Relocator-Eclipse.toe' <a class="header-anchor" href="#pixel-relocator-eclipse-toe">#</a></h3>
+            <p>An incorrectly wired <a href="https://derivative.ca/UserGuide/Palette:pixelRelocator">Pixel Relocator</a>, with a few audio-reactive circles.</p>
+            <img src="eclipse.gif" loading="lazy" alt="">
+            <h3 id="torus-in-sphere-toe" tabindex="-1">'Torus-in-Sphere.toe' <a class="header-anchor" href="#torus-in-sphere-toe">#</a></h3>
+            <p>A wireframe torus in a wireframe sphere, with the same FOV trick as the Outrun/Matrix Walls scene, plus the addition of a little camera spin.</p>
+            <img src="torus-sphere.gif" loading="lazy" alt="">
+            <h3 id="noise-frequency-wave-toe" tabindex="-1">'Noise-Frequency-Wave.toe' <a class="header-anchor" href="#noise-frequency-wave-toe">#</a></h3>
+            <p>Three monochrome noise elements turned into a grid, bouncing to the low, mid, and high frequencies respectively.</p>
+            <img src="noise-wave.gif" loading="lazy" alt="">
+            <p>[Only one of the three shown above]. By far, the most CPU &amp; GPU intensive element in the performance. Had to keep them off until I needed them, as they tank the FPS of the whole TD project. Can't say I quite know why -- but I'd assume the feedback look is up to no good.</p>
+            <h3 id="other-miscellaneous-toe" tabindex="-1">'Other-Miscellaneous.toe' <a class="header-anchor" href="#other-miscellaneous-toe">#</a></h3>
+            <img src="noise-pixels.gif" loading="lazy" alt="">
+            <img src="globe.gif" loading="lazy" alt="">
+            <img src="triangle.gif" loading="lazy" alt="">
+            <p>Skim through the full livestream at the end of this post to see the rest.</p>
+            <h3 id="audio-analysis" tabindex="-1">Audio Analysis <a class="header-anchor" href="#audio-analysis">#</a></h3>
+            <p>After not being fully satisfied with my own attempts at low and high pass filters, I stumbled upon the easy-to-use <a href="https://derivative.ca/UserGuide/Palette:audioAnalysis">audio analysis component</a>. Low, Mid, and High I conceptually understand, but how it's able to determine the 'rhythm', or what 'spectral density' even means, I'll have to leave up to the thinkers.</p>
+            <p><picture><source type="image/avif" srcset="eOo8kT7LzB-1451.avif 1451w"><source type="image/webp" srcset="eOo8kT7LzB-1451.webp 1451w"><img alt="Audio Analaysis component in TouchDesigner" loading="lazy" decoding="async" src="eOo8kT7LzB-1451.png" width="1451" height="840"></picture></p>
+            <p>When mapped to my MIDI board (thanks to <a href="http://hoepffner.info">Jacques Hoepffner's</a> NanoKontrol2 MIDI map for TouchDesigner), it allowed for easy, centralized control of all the audio-reactive components in my project.</p>
+            <h2 id="hardware-setup" tabindex="-1">Hardware Setup <a class="header-anchor" href="#hardware-setup">#</a></h2>
+            <p>The original hope was to use a machine provided by the event production company (intended for running just Resolume), but both Resolume and TouchDesigner are hardware-hogs and no single machine was able to maintain steady FPS running them both. After playing around with a lot of options, the following setup was decided on:</p>
+            <ul>
+                <li>My Windows 10 desktop (RTX 3070, i5-11600K) for TouchDesigner renders,</li>
+                <li>and an M2 Mac Mini running Resolume to drive the outputs to the LED wall and projector,</li>
+                <li>Both hooked up over Ethernet to my old Apple router.
+                    With the two machines on a closed network, I was able to serve the TouchDesigner renders [via a &quot;Touch Out&quot; CHOP] from the Win10 machine to a client TouchDesigner process running on the Mac. The Mac then piped the renders to Resolume via a <a href="https://syphon.info/">Syphon</a> [&quot;<a href="https://derivative.ca/UserGuide/Syphon_Spout_Out_TOP">Syphon/Spout Out</a>&quot;] server to Resolume. This could have been done through Syphon alone, but I didn't trust the 1Gig Ethernet connection to transfer the video with as high stability as the in-house TD in/out process.</li>
+            </ul>
+            <p><picture><source type="image/avif" srcset="mih28En6xA-4032.avif 4032w"><source type="image/webp" srcset="mih28En6xA-4032.webp 4032w"><img alt="My Setup main view two monitors two computers" loading="lazy" decoding="async" src="mih28En6xA-4032.png" width="4032" height="3024"></picture></p>
+            <p><picture><source type="image/avif" srcset="VrB8yU7ebX-3024.avif 3024w"><source type="image/webp" srcset="VrB8yU7ebX-3024.webp 3024w"><img alt="My setup side view" loading="lazy" decoding="async" src="VrB8yU7ebX-3024.png" width="3024" height="4032"></picture></p>
+            <p>The DJ setup:
+                <picture><source type="image/avif" srcset="XthgjYQqYU-4032.avif 4032w"><source type="image/webp" srcset="XthgjYQqYU-4032.webp 4032w"><img alt="DJ setup showing two turntables and mixer" loading="lazy" decoding="async" src="XthgjYQqYU-4032.png" width="4032" height="3024"></picture></p>
+            <h2 id="the-performance" tabindex="-1">The performance <a class="header-anchor" href="#the-performance">#</a></h2>
+            <p>While the main purpose of Resolume was scene switching and output mapping, I ended up making heavy use of its channel mixing features (familiar to me as the equivalent to Photoshop's &quot;Blending Modes&quot;) to really tie everything together. Did a fair bit of tweaking the project live, which I didn't initially plan to do, but I was running low on scenes and it worked out well. Pretty much just copy/pasting my audio analysis setup between scenes and tying it to random variables in the proper range.</p>
+            <p><strong>Reupload of the livestream</strong>: <a href="https://youtu.be/20M1lKXCAbQ">https://youtu.be/20M1lKXCAbQ</a></p>
+            <p><span><iframe width="auto" height="auto" src="https://www.youtube.com/embed/20M1lKXCAbQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></span></p>
+            <p><picture><source type="image/avif" srcset="3wfzJpREA1-6433.avif 6433w"><source type="image/webp" srcset="3wfzJpREA1-6433.webp 6433w"><img alt="Photo of performance from audience" loading="lazy" decoding="async" src="3wfzJpREA1-6433.jpeg" width="6433" height="4289"></picture></p>
+            <p><picture><source type="image/avif" srcset="kOOyWKp-DY-6720.avif 6720w"><source type="image/webp" srcset="kOOyWKp-DY-6720.webp 6720w"><img alt="Photo of performance from audience" loading="lazy" decoding="async" src="kOOyWKp-DY-6720.jpeg" width="6720" height="4480"></picture></p>
+            <p><picture><source type="image/avif" srcset="9kkEokme95-6392.avif 6392w"><source type="image/webp" srcset="9kkEokme95-6392.webp 6392w"><img alt="Photo of performance from audience" loading="lazy" decoding="async" src="9kkEokme95-6392.jpeg" width="6392" height="4261"></picture></p>
+            <p><picture><source type="image/avif" srcset="_KKW_OdxWk-6168.avif 6168w"><source type="image/webp" srcset="_KKW_OdxWk-6168.webp 6168w"><img alt="Photo of performance from audience" loading="lazy" decoding="async" src="_KKW_OdxWk-6168.jpeg" width="6168" height="4112"></picture></p>
+            <p><picture><source type="image/avif" srcset="DMP3D6uRQM-6720.avif 6720w"><source type="image/webp" srcset="DMP3D6uRQM-6720.webp 6720w"><img alt="Photo of performance from audience" loading="lazy" decoding="async" src="DMP3D6uRQM-6720.jpeg" width="6720" height="4480"></picture></p>
+            <p><picture><source type="image/avif" srcset="7IKpeXVMhh-6101.avif 6101w"><source type="image/webp" srcset="7IKpeXVMhh-6101.webp 6101w"><img alt="Photo of performance from audience" loading="lazy" decoding="async" src="7IKpeXVMhh-6101.jpeg" width="6101" height="4067"></picture></p>
+            <p><picture><source type="image/avif" srcset="h_2v_WVXzr-4296.avif 4296w"><source type="image/webp" srcset="h_2v_WVXzr-4296.webp 4296w"><img alt="Photo of performance from audience" loading="lazy" decoding="async" src="h_2v_WVXzr-4296.jpeg" width="4296" height="6444"></picture></p>
+
+<!--            <div class="links-nextprev"><p>Previous: <a href="/blog/unraid/">NAS Homelab</a></p>-->
+        </div>
+    </div>
+</div>
+<script src="/prismjs/prism.js"></script>
+</body>
+</html>
