@@ -27,11 +27,13 @@
 <div id="main">
   <div class="post">
     <h1>NAS Homelab -<br>6 Months In</h1>
-    <ul class="post-metadata">
-      <li><time datetime="2022-10-26">26 October 2022</time></li>
-      <li><a href="/tags/homelab/" class="post-tag">homelab</a></li>
-    </ul>
-    <h2 class="subtitle">My Experience running Unraid</h2>
+    <div id="post-metadata">
+      <h2 class="subtitle">My Experience running Unraid</h2>
+      <ul>
+        <li><time datetime="2022-10-26">26 October 2022</time></li>
+        <li><a href="/tags/homelab/" class="post-tag">homelab</a></li>
+      </ul>
+    </div>
     <div id="post-body">
       <h2 id="planning" tabindex="-1">Planning <a class="header-anchor" href="#planning">#</a></h2>
       <h3 id="why" tabindex="-1">Why? <a class="header-anchor" href="#why">#</a></h3>
@@ -46,7 +48,7 @@
       <h3 id="the-hardware" tabindex="-1">The Hardware <a class="header-anchor" href="#the-hardware">#</a></h3>
       <p>Off the bat I didn't want to go for any pre-built solution, as that just felt kinda lame and uninspired. It would have made this post a lot shorter and saved me a lot of future stress – and I guess therefore learning experiences –, so like, what would the point be?</p>
       <p>Starting out with the hardware I wanted to use, I figured I would put the old shell of my gaming rig to use. The case is the Corsair Air 240, a small (maybe too small, I was never able to fit the acrylic side panel on because of my GPU's heat pipe 😅) micro-ATX cube case. A bit quirky, but I certainly prefer it over a standard tower case. It's also the perfect dimensions to fit onto [into?] a shelf in my living room while still leaving room for airflow.</p>
-      <p><img src="/img/unraid/corsair_air_240.png" alt="Corsair Air 240"></p>
+      <p><img src="corsair_air_240.png" alt="Corsair Air 240"></p>
       <p>The circa 2014 case has long since been discontinued, but I have recently come across its bigger sibling (the 540) sold by Lambda Labs for some of their &quot;ML workstations&quot; (They seem to love how easily the magnetic Corsair log can be replaced with their own).</p>
       <p>The case still had an <a href="https://www.asrock.com/mb/Intel/H81M-HDS/">ASRock H81M-HDS</a> motherboard and <em>i5-4690K</em> I had left in it, along with my old coil-whining GTX 970. I popped the 970 out as I didn't want to pay for all that extra electricity and I figured the CPU could handle some light transcode loads on its own (it can).</p>
       <p>The ASRock board is definitely in the 'budget' class and comes with an entertaining listing of &quot;unique features&quot; to match (half are Windows programs, the other half are pretty standard motherboard features):</p>
@@ -79,7 +81,7 @@
       <p>The CPU cooler is missing a fan blade (these things happen when you are missing a side panel), but never troubled me when I was gaming on it, so I figured I'd keep it  in. And hey, you can't tell the difference once it's spun up 🤫</p>
       <p><em><strong>But yeah, TL;DR I took my old gaming pc, removed the graphics and Wi-Fi cards, and called it a server.</strong></em></p>
       <h3 id="the-os" tabindex="-1">The OS <a class="header-anchor" href="#the-os">#</a></h3>
-      <p><img src="/img/unraid/planning-os.jpg" alt="OS Planning Notes"></p>
+      <p><img src="planning-os.jpg" alt="OS Planning Notes"></p>
       <p>The main two contenders were TrueNAS and Unraid, but a quick glance was had at some Raspberry Pi based NAS software. However, a quick look at this document and the astute among us (sarcasm + ඞ) might recognize that the small column in the top right consists of the different options and the other 99% (joke) of the page is about the inner workings of Unraid. So, yeah. I pretty quickly fell in love with Unraid's feature set. Mainly:</p>
       <ul>
         <li>Not true RAID, so any-old hard drives of random sets of capacities can be used (more budget friendly).</li>
@@ -91,9 +93,9 @@
       <h3 id="the-usb-creator-tool-a-tale-of-woe" tabindex="-1">The USB Creator Tool, a Tale of Woe <a class="header-anchor" href="#the-usb-creator-tool-a-tale-of-woe">#</a></h3>
       <p>Starting with the <a href="https://wiki.unraid.net/Articles/Getting_Started">Getting Started</a> article. It tells me to check that my hardware is compatible. Looks like I need a flash drive that is &quot;2GB or larger&quot;. I got my trusty Corsair Flash Voyager Slider 32GB, I'm sure that will work just great! I pulled up the official USB Creator Tool and get to flashing the OS onto the drive. It Hangs.</p>
       <p>Okay, further research on the forums tells me that USB 3.0 drives are not well-supported.</p>
-      <p><img src="/img/unraid/usb_3_support.png" alt="usb_3_support"></p>
+      <p><img src="usb_3_support.png" alt="usb_3_support"></p>
       <p>Ok weird, but sure. I'll pop in one of my random generic USB 2.0 drives. The flash tool doesn't recognize it at all. I tried reformatting the drive and still no luck. <a href="https://www.reddit.com/r/unRAID/comments/fmrngk/unraid_usb_creator_cant_find_usb/">This</a> reddit thread suggests I try the manual installation. Ok sure. I did that and plugged it into my server. Got a <a href="https://www.reddit.com/r/unRAID/comments/fmrngk/unraid_usb_creator_cant_find_usb/">new error</a>. I guess my drive is corrupted? Ok try another drive with the USB tool. It doesn't see it. I decided to try it on my Mac with a USB-A to C adapter. It shows up, formats, and boots unraid! Alright, it took me a couple nights, a handful of flash drive candidates, and two computers to get there, but it's working now, and I'm in the OS.</p>
-      <p><img src="/img/unraid/usb_firefox_history.png" alt="My Firefox history showing a lot of searches for USB issues in unraid"></p>
+      <p><img src="usb_firefox_history.png" alt="My Firefox history showing a lot of searches for USB issues in unraid"></p>
       <p>So not a great start, but I'm happy its up and working, though the documentation and overall support for this process could certainly be improved.</p>
       <h3 id="setting-up-the-nas-elements" tabindex="-1">Setting up the &quot;NAS&quot; Elements <a class="header-anchor" href="#setting-up-the-nas-elements">#</a></h3>
       <p>Well, not much to say here, this process being one of the few self-explanatory workflows in the OS. Following <a href="https://wiki.unraid.net/Articles/Getting_Started#Initial_Setup">the guides</a> gets you where you need to be with limited issue.
@@ -106,9 +108,9 @@
         From my understanding this was a user built extension that was recently merged [kinda] into Unraid (an interesting pattern I see with a lot of Unraid features) in release 6.10.
         I say 'kinda' as they include the button for it in their UI by default, but will prompt you to download the external plugin if you don't already have it installed. CA is definitely a key part of Unraid – so much so that they have had a <a href="https://unraid.net/community/apps">dedicated page</a> for it on their site since at least Oct 2020 (<a href="https://web.archive.org/web/20201218234535/https://unraid.net/community/apps">archive</a>), and I'd say it's been the de facto Docker installer for Unraid since well before then. Every tutorial you find (even the official ones!) will point you there first.</p>
       <p>Why is it loved so much? Well, the actual Unraid manager for docker isn't all that great:</p>
-      <p><img src="/img/unraid/add_container.png" alt="add docker container"></p>
+      <p><img src="add_container.png" alt="add docker container"></p>
       <p>The template dropdown by default includes Plex, Sync, sysdream, and UnraidNet. It will appear more populated once you set up CA, and install some apps from there.</p>
-      <p><img src="/img/unraid/docker_templates.png" alt="docker templates"></p>
+      <p><img src="docker_templates.png" alt="docker templates"></p>
       <p>As I'm about to complain about how hard this interface is to use, I just came across this line in the <a href="https://wiki.unraid.net/Manual/Docker_Management#Adding_Applications_as_Containers">official Unraid Docker documentation</a>; &quot;<strong>This method [the built-in docker system] is now deprecated and the recommended way to add all containers is via Community Applications</strong>&quot;. So now I get to shift my complaint from 'it is hard to install your own Docker apps,' to 'Unraid <em>does not officially support</em> docker natively'. Well I guess they technically support it natively, as the system has Docker installed and kept up to date, but they don't support it via the GUI without 3rd party tools. So now support for Dockerization has moved off LimeTech's plate and onto that of this <a href="https://forums.unraid.net/topic/38582-plug-in-community-applications/">157-page forum thread</a>, and support for specific containers to <a href="https://forums.unraid.net/forum/47-docker-containers/">this sub-forum</a>.</p>
       <p>This is a trend I see often with Unraid. Having an issue? Dig through this long forum thread and try to find the most up-to-date advice for your problem. Their own documentation even links to these forum threads in places, telling you they are sources of truth for a particular feature set or fix.</p>
       <p>So when you want to add a container that is not included in CA you can either use this deprecated Docker interface, or create an <a href="https://wiki.unraid.net/DockerTemplateSchema">XML template for CA</a>. This immediately adds a strong learning curve for what translates to a <code>docker run</code> with an argument or two.</p>
@@ -116,31 +118,31 @@
       <h2 id="hotdiskdrives" tabindex="-1">HotDiskDrives <a class="header-anchor" href="#hotdiskdrives">#</a></h2>
       <p><em>July</em></p>
       <p>During the hot summer months unraid was sending me 20-some-odd temperature warnings a day alerting me of over 60deg temps on all my hard disks. I was suprised at first but realized that because the Air 240 has a dual chamber design, it keeps airflow on the PSU and disk side fully separate from the MOBO side, and well, I had no fans on the disk side. Apparently I wasn't the only person having these issues as I stumbled upon <a href="https://archive.ph/OWwhN">this 3D printed fan mount</a> to replace the HDD cage cover.</p>
-      <p><img src="/img/unraid/3d-printed-cage.jpg" alt="3D Printed Cage"></p>
+      <p><img src="3d-printed-cage.jpg" alt="3D Printed Cage"></p>
       <p>It is a little overpriced after shipping for such a simple 3D print, so ultimately I decided I could just do the equivalent myself and glued a fan grill to the rear and attached a fan to that.</p>
-      <p><img src="/img/unraid/image3.jpg" alt="image3"></p>
+      <p><img src="image3.jpg" alt="image3"></p>
       <h2 id="upgrading-the-network" tabindex="-1">Upgrading the Network <a class="header-anchor" href="#upgrading-the-network">#</a></h2>
       <p><em>Mid to Late August</em></p>
       <p>After dealing with the slow transfer of some of my larger files, I decided I wanted to speed things up a notch and take a stab at some networking tech. With my primary goal being to speed up connection between my desktop and my server, I set out on some research. I knew my current desktop computer had a 2.5G ethernet NIC and that I could get some sort of networking expansion card to fill one of the PCI-E lanes in my NAS. I started by looking around at 10G switches but was surprised to see how expensive they were compared to a regular 1 gig switch, even the budget/consumer-friendly 2.5G options. All leaning over the $150 range for equipment to <em>connect</em> some &gt;1G devices. I asked a coworker at my IT job for some advice, and he directed me to <a href="https://www.fs.com/">fs.com</a>, and recommended I skip the switch altogether and just get a dual-NIC card to directly connect my PC to my server and from each to my router. While good advice to save money, I also wanted something I could incorporate more machines into – something more long term, so I kept looking at switch options. I had almost settled on the cheapest 2.5G switch I could find on AliExpress and Taobao, when this coworker gave me a dual-NIC SFP+ card and told me it could disappear from the office, which I gladly accepted. I admit I didn't really know what SFP was and had to google around for a bit to figure out what I needed to get a setup up and running with this. Of course, SFP+ switches are even more expensive than your regular RJ45 ones, but luckily the DIY home networking community seems to pretty unanimously love and recommend the <a href="https://mikrotik.com/product/crs305_1g_4s_in#fndtn-specifications">Mikrotik CRS305-1G-4S+IN</a>. At $160 it was practically the single-most cheapest SFP+ switch on the market, all-the-while offering solid I/O with 4 SFP+ ports and 1GbE uplink. The only immediate downside was the lack of 2.5G negotiation. However, there exists a quick fix for this in the form of an SFP+ module – the <a href="https://mikrotik.com/product/s_rj10#fndtn-downloads">S+RJ10</a> – that can pull some special tricks to negotiate down to 2.5G. The caveat being it is intended for actively cooled switches, which the CRS305 is not. This is only a constraint due to how hot the module will get without fans to cool it off. Well, It just so happened the ventilation holes atop the switch lined up perfectly with a 20mm fan, so I bought <a href="https://noctua.at/en/nf-a4x20-flx">one</a> and &quot;attached&quot; it with some anti-vibration rubber fan mounts and added a small grill atop the fan to make it seem slightly harder for the blades to snag a stray cable. I used the USB port on my router to supply power via a USB to 3-pin fan adapter</p>
-      <p><img src="/img/unraid/fan_mount.jpg" alt=""></p>
+      <p><img src="fan_mount.jpg" alt=""></p>
       <p>It would probably fall right off if shaken or flipped, but it does the trick.</p>
       <h2 id="the-final-upgrade-psu" tabindex="-1">The Final Upgrade: PSU <a class="header-anchor" href="#the-final-upgrade-psu">#</a></h2>
       <p>The last thing I wanted to do for the near future for the server was to upgrade its power supply. It was currently running a seven-year-old bronze rated Corsair PSU that I was never super comfortable running all my valuable data off of. So I shopped around (opened PC part-picker, selected all 80+ Gold and above ratings, around 500-700 Watts) and decided on the 650W Platinum rated EVGA SuperNOVA 650 P2. Discounted on the manufacturer's website for $63 total, I was surprised how low it was below its usual $110+ price range.</p>
-      <p><img src="/img/unraid/psu-order.png" alt="psu order"></p>
+      <p><img src="psu-order.png" alt="psu order"></p>
       <p>When the PSU came I got right to plugging it in, replacing the dusty old PSU with this new one. Coming in at a surprising full inch or so bigger than the previous power supply, but it fit just fine. Quick and easy installation, plugged it in and turned it on. I see the OS boot just fine, so I go off and eat dinner. I come back and go to start the array and am surprised to see none of my HDDs, nor my cache SSD are recognized, with unRAID telling me there is &quot;no devices&quot; in the drive selection dropdown.</p>
       <p>I decided to replace the SATA Power cable and I noticed something not quite that cool. The pin-outs are different. The cables look the exact same from anywhere other than the tiny metallic pin-outs inside the power supply end (though one is certainly more dusty than another). Turns out (<a href="https://superuser.com/questions/1715077/new-psu-not-providing-power-to-hard-drives">source</a>) Corsair does this:</p>
-      <p><img src="/img/unraid/corsair_psu.jpg" alt="corsair psu pinout"></p>
+      <p><img src="corsair_psu.jpg" alt="corsair psu pinout"></p>
       <p>While EVGA does this:</p>
-      <p><img src="/img/unraid/evga_psu.jpg" alt="evga psu pinout"></p>
+      <p><img src="evga_psu.jpg" alt="evga psu pinout"></p>
       <p>How I would ever know that is a mystery. When I mentioned this to friends only a few said they had vaguely heard something about this being a discrepancy between manufactures. Well whatever, I'll swap the cables over to the correct ones and reboot. Nope. No devices detected. No disk spin at all, even.</p>
       <p>Well this wasn't good lol.</p>
       <p>Googling around in despair I find that almost everyone everywhere seems to either reference or copy/paste their answer to the &quot;I used the wrong PSU cable&quot; problem from <a href="https://archive.ph/8giHG" target="_blank">this hddoracle.com thread</a>. So to sum it up there is a Transient Voltage Suppression (TVS) diode on the inner-side of the exposed PCB on the back of the drive whose job is [includes] to prevent overvoltages from making it to the inner-workings of the drive by short-circuiting itself out.</p>
-      <p><img src="/img/unraid/hdd_pcb.jpg" alt="hdd pcb"></p>
+      <p><img src="hdd_pcb.jpg" alt="hdd pcb"></p>
       <p>Well I borrowed a fancy-schmancy multimeter from a lab at my Uni and fumbled around till I found a page in the manual online that sounded like what I was looking for:</p>
-      <p><img src="/img/unraid/testing_meter.png" alt="testing meter"></p>
+      <p><img src="testing_meter.png" alt="testing meter"></p>
       <p>I put the ends of the multimeter on what some random Redditors told me was the correct diodes, and sadly I only got a single beep: the diode had not shorted. Meaning the over-voltage was probably sent nowhere good and all my data was housed on expensive bricks.</p>
       <p>I contacted some repair and recovery shops, but the lowest quote I got was $750 as the best case scenario for my smallest (3TB) drive, which was not really within a reasonable budget for me. Even my cache SSD toast:</p>
-      <p><img src="/img/unraid/ssd_burnt.jpg" alt=""></p>
+      <p><img src="ssd_burnt.jpg" alt=""></p>
       <p>In fact, it was slightly more toast than the hard drives in the sense that it had clearly burned up in some parts and made some computer chip toast.</p>
       <h2 id="rebuilding" tabindex="-1">Rebuilding <a class="header-anchor" href="#rebuilding">#</a></h2>
       <p>After looking around my files I found that I luckily had an older copy (about 6 months outdated) of my Shadow Replay collection on one of my desktop drives. As for my &quot;Linux ISOs&quot; I had nothing super rare or hard to find, so I was able to get back to torrenting them all back into my Plex library. The big thing I haven't got set back up again is my personal documents and things like encrypted recovery codes as that all takes some time to re-assemble.</p>
@@ -158,8 +160,8 @@
         <li>Added a 815W <a href="https://www.amazon.com/gp/product/B0BCN5JH25/" target="_blank">CyberPower UPS</a></li>
         <li>Woke up early and bought a <a href="https://store.ui.com/collections/unifi-network-unifi-os-consoles/products/dream-router" target="_blank">Dream Router</a> before it was bought up by bots. Still took me a few months waiting for Discord stock notifications before I landed it.</li>
       </ul>
-      <p><img src="/img/unraid/current_setup.jpg" alt=""></p>
-      <p><img src="/img/unraid/current_setup_ups.jpg" alt=""></p>
+      <p><img src="current_setup.jpg" alt=""></p>
+      <p><img src="current_setup_ups.jpg" alt=""></p>
 
       <div class="links-nextprev"><p>Next: <a href="/blog/techno-ambiance/">Techno Ambiance</a></p>
       </div>
