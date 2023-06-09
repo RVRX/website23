@@ -82,3 +82,16 @@ a {
 a:hover {
     color: #868686;
 }
+
+.fixed-bottom {
+    font-size: 1.5rem;
+    position: fixed;
+    right: 0;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 1030;
+
+    text-align: left;
+
+    /*fill: rgb(186,	186, 186);*/
+}
