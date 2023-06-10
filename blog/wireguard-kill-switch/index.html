@@ -31,18 +31,19 @@
     <h1>WireGuard Kill-Switch</h1>
     <div id="post-body">
       <h2 id="intro-and-setting-up-wireguard" tabindex="-1">Intro, and Setting Up WireGuard <a class="header-anchor" href="#intro-and-setting-up-wireguard">#</a></h2>
-      <p>This is a guide on setting up a Kill-Switch for WireGuard on Linux, covering some niche network cases. The server used to test this was running Ubuntu 22.04.</p>
+      <p>This is a guide on setting up a Kill-Switch for WireGuard on Linux, covering some niche network cases. The server used to test this was running Ubuntu 22.04 LTS, but the commands are not unique to Ubuntu and most Linux distros should follow suit.</p>
       <p>If you are instead looking to setup, or have not setup WireGuard, I'd recommend this tutorial by Mullvad: <a href="https://mullvad.net/en/help/easy-wireguard-mullvad-setup-linux/">WireGuard on Linux terminal (easy)</a>.</p>
       <blockquote>
 <!--        <p>When tinkinering, make sure you know how to undo any commands typed into the <code>PostUp</code> and <code>PreDown</code> sections of your Wiregaurd config! If you typed something wrong and the tunnel connection cannot complete it will leave the config file half-run, without having yet called the PreDown commands. <code>iptables -S</code> and <code>-D</code> are your friend.-->
 <!--          {.is-danger}</p>-->
       </blockquote>
       <h2 id="the-kill-switch" tabindex="-1">The 'Kill-Switch' <a class="header-anchor" href="#the-kill-switch">#</a></h2>
-      <p>As Wiregaurd defines it, a kill-switch is used to prevent the flow of unencrypted packets through the non-WireGuard interfaces on your device. You might see this option when downloading your WireGuard config from <a href="https://mullvad.net/en">Mullvad</a>, and <a href="https://www.ivpn.net/knowledgebase/linux/linux-wireguard-kill-switch/">IVPN has a tutorial</a> explaining how to modify a config to implement a kill-switch.</p>
-      <p>Well someone copied somebody's homework, as they both apply the exact same modification to your WireGuard config (<code class="language-bash">/etc/wireguard/*.conf</code>), as do many other sources on the internet:</p>
+      <p>A kill-switch is used to prevent the flow of unencrypted packets through the non-WireGuard interfaces on your device (such as when your VPN connection drops). You might see this as an option when downloading your WireGuard config from <a href="https://mullvad.net/en">Mullvad</a>, and <a href="https://www.ivpn.net/knowledgebase/linux/linux-wireguard-kill-switch/">IVPN has a tutorial</a> explaining how to modify a config to implement a kill-switch.
+          In effect, both these services are just adding lines to your WireGuard config file (<code class="language-bash">/etc/wireguard/*.conf</code>). In fact, it looks like someone copied somebody's homework, as they both apply the exact same lines of code to the config file:</p>
+<!--      <p>Well someone copied somebody's homework, as they both apply the exact same modification to your WireGuard config (), as do many other sources on the internet:</p>-->
       <pre  class="line-numbers"><code class="language-bash">PostUp  =  iptables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT && ip6tables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
 PreDown = iptables -D OUTPUT ! -o %i -m mark ! --mark $(wg show  %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT && ip6tables -D OUTPUT ! -o %i -m mark ! --mark $(wg show  %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT</code></pre>
-      <p>These lines should be added after the [Interface] section, but before and [Peer] section of your config. As it turns out, the first chunk of each line above is lifted directly from the <code>wg-quick</code> man page, and the second half is an addition to make the kill-switch work over IPv6 via <code>ip6tables</code>.</p>
+      <p>These lines are added after the [Interface] section, but before and [Peer] section of your config. As it turns out, the first chunk of each line above is lifted directly from the <code>wg-quick</code> man page, and the second half is an addition to make the kill-switch work over IPv6 via <code>ip6tables</code>.</p>
       <p>Let's break down the important parts of this kill-switch here...</p>
       <ol>
         <li>First we have <code class="language-">PostUp</code> and <code class="language-">PreDown</code> at the start of each line. Pretty simple, those define script snippets to be executed by bash after the wg tunnel is brought up, and before it tears down respectively.</li>
@@ -51,11 +52,11 @@ PreDown = iptables -D OUTPUT ! -o %i -m mark ! --mark $(wg show  %i fwmark) -m a
         <li><code class="language-">! -o %i</code> Applies the rule to all network interfaces, except the WG tunnel's interface. <code class="language-">wg-quick</code> handily expands <code class="language-">%i</code> to the interface for this config file (usually the name of the file, so <code class="language-">wg0.conf</code> would correspond to the <code class="language-">wg0</code> interface.</li>
         <li><code class="language-">! --dst-type LOCAL</code> Applies the rule to all network traffic except &quot;LOCAL&quot;. That is, an address that is local to the host we are working on. 127.0.0.1 for example. This <strong>does not include other LAN IPs</strong>.</li>
       </ol>
-      <p>So what have we done by adding this to our config? Effectively, if the connection to the VPN server ever drops, these iptable rules will prevent traffic from going through any of the other interfaces. A super handy feature, but it has some rather annoying unintended consequences.</p>
+      <p>What have we done by adding this to our config? Effectively, if the connection to the VPN server ever drops, these iptable rules will prevent traffic from going through any of the other interfaces. A super handy feature, but – depending on your network – it has some rather annoying unintended consequences.</p>
       <h2 id="unintended-consequences" tabindex="-1">Unintended Consequences <a class="header-anchor" href="#unintended-consequences">#</a></h2>
-      <p>If you are SSH'ed into a machine when you start up a tunnel with these rules set, your terminal will stop responding. Why? Well you just told your server that it isn't able to talk to you anymore, as you are not connected to the server through the WireGuard tunnel's network interface. The fix? Well it depends on your network architecture...</p>
+      <p>If you are SSH'ed into a machine when you start up a tunnel with these rules set, your terminal will stop responding. Why? Well, you just told your server that it isn't allowed to talk to you anymore as you are not connected to the server through the WireGuard tunnel's network interface. The fix? Well it depends on your network architecture...</p>
       <h3 id="for-most-iptables-rule-exception" tabindex="-1">For Most: IPtables rule exception <a class="header-anchor" href="#for-most-iptables-rule-exception">#</a></h3>
-      <p>If you are most people you <em><strong>should be able to</strong></em> just change the kill-switch lines to include an exception for your local IP. This is done by adding <code>! -d 10.0.0.0/24</code> just before the <code>-j Reject</code> in the iptables command (where the IP/Mask is your local subnet). Just like the <code>! --dst-type LOCAL</code> indicated not (!) to include localhost IPs in the rule, this adds an exception for destination in the specified IP/subnet.</p>
+      <p>If you are most people you <em><strong>should be able to</strong></em> just change the kill-switch lines to include an exception for your local IP. This is done by adding <code class="language-">! -d 10.0.0.0/24</code> just before the <code class="language-">-j Reject</code> in the iptables command (where the IP/Mask is your local subnet). Just like the <code class="language-">! --dst-type LOCAL</code> indicated not (!) to include localhost IPs in the rule, this adds an exception for destination in the specified IP/subnet.</p>
       <p>Like so:</p>
       <pre><code class="language-">PostUp = iptables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL ! -d 10.0.0.0/24 -j REJECT &amp;&amp; ip6tables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
 PostDown = iptables -D OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL ! -d 10.0.0.0/24 -j REJECT &amp;&amp; ip6tables -I OUTPUT ! -o %i -m mark ! --mark $(wg show %i fwmark) -m addrtype ! --dst-type LOCAL -j REJECT
@@ -119,9 +120,9 @@ AllowedIPs = 0.0.0.0/0, ::/0
       <p>The other feature I'd recommend making use of is enabling WireGuard to start automatically on boot. To do this, run the following command, replacing <code>wg0</code> with your config name: <code>systemctl enable wg-quick@wg0</code>. Then, If you then have any other systemd services that start automatically, add <code>wg-quick@wg0</code> to the task's <code class="language-">After=</code> section. Check out the systemd man-page or a guide for more info there.</p>
       <h2 id="see-also-references" tabindex="-1">See Also / References <a class="header-anchor" href="#see-also-references">#</a></h2>
       <ul>
-        <li><code>iptables</code> manpage</li>
-        <li><code>wg</code> manpage</li>
-        <li><code>wg-quick</code> manpage</li>
+        <li><code class="language-">iptables</code> manpage</li>
+        <li><code class="language-">wg</code> manpage</li>
+        <li><code class="language-">wg-quick</code> manpage</li>
           <li><a href="https://www.procustodibus.com/blog/2021/03/wireguard-allowedips-calculator/">https://www.procustodibus.com/blog/2021/03/wireguard-allowedips-calculator/</a></li>
           <li><a href="https://www.reddit.com/r/WireGuard/comments/yy9hde/ssh_into_machine_from_lan_stops_working_when/">https://www.reddit.com/r/WireGuard/comments/yy9hde/ssh_into_machine_from_lan_stops_working_when/</a></li>
           <li><a href="https://www.reddit.com/r/WireGuard/comments/auuvn5/problem_excluding_private_networks_in_allowedips/">https://www.reddit.com/r/WireGuard/comments/auuvn5/problem_excluding_private_networks_in_allowedips/</a></li>
