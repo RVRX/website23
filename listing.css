@@ -34,10 +34,12 @@ body {
 .post-subtitle {
     font-family: "CenturySchoolbookRegular", Times, serif;
     font-size: 2rem;
+    /*text-transform: uppercase;*/
 }
 .post-title {
     font-family: "CenturySchoolbookBold", Times, serif;
     font-size: 3.5rem;
+    text-transform: uppercase;
 }
 
 
@@ -59,6 +61,7 @@ body {
 
 p.post-title {
     margin: 0;
+    margin-top: -15.5px;
 }
 
 
