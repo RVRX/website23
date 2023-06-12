@@ -7,6 +7,10 @@
   - what will be on it...?
 - More images
 - Image optimization
+  - https://stackoverflow.com/questions/27934548/load-a-low-res-background-image-first-then-a-high-res-one
+  - https://developer.mozilla.org/en-US/docs/Web/CSS/image/image-set
+  - https://web.dev/serve-responsive-images/
+  - https://www.imagemagick.org/script/index.php
 - Homepage icons should chnage color on hover
 - Meta tags
 - Canonical tag if multiple domains?
