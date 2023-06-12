@@ -6,6 +6,7 @@
 
     <link href="/listing.css" rel="stylesheet">
     <link href="/sidebar.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>body {background-image: url("/img/background-blog-new.png")}</style>
 </head>
 <body>
@@ -25,10 +26,10 @@
     </nav>
     </div>
 </div>
-<div id="main">
+<div id="main" style="overflow: hidden;">
     <div class="post">
         <a href="wireguard-kill-switch">
-        <div class="post-container" style="background-color: #c579b1;">
+        <div class="post-container" data-aos="slide-left" style="background-color: #c579b1; transition-duration: 600ms;">
             <p class="post-title">WireGuard Kill-Switch</p>
             <p class="post-subtitle">Jun 2023</p>
         </div>
@@ -36,7 +37,7 @@
     </div>
     <div class="post">
         <a href="techno-ambiance">
-        <div class="post-container" style="background-color: #9f628f;">
+        <div class="post-container" data-aos="slide-left" style="background-color: #9f628f; transition-duration: 500ms;">
             <p class="post-title">Techno Ambiance</p>
             <p class="post-subtitle">Feb 2023</p>
         </div>
@@ -44,7 +45,7 @@
     </div>
     <div class="post">
         <a href="unraid">
-        <div class="post-container" style="background-color: #794b6d">
+        <div class="post-container" data-aos="slide-left" style="background-color: #794b6d; transition-duration: 650ms;">
             <p class="post-title">Starting a NAS Homelab</p>
             <p class="post-subtitle">Oct 2023</p>
         </div>
@@ -52,4 +53,8 @@
     </div>
 </div>
 </body>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
 </html>
