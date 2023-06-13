@@ -3,7 +3,7 @@ body {
     /* Background image styling */
     /* https://css-tricks.com/perfect-full-page-background-image/, but expanded to allow for fallback color */
     background-color: rgb(35, 35, 35);
-    background-image: url("/img/background-candidate-post-2.png"); /* TODO: scale image more realistically */
+    background-image: url("/img/background-candidate-post-2-SfW-80.jpg"); /* TODO: scale image more realistically */
     background-position: center center;
     background-attachment: fixed;
     background-repeat: no-repeat;

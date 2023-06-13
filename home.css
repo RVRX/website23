@@ -5,7 +5,7 @@ body {
     /* Background image styling */
     /* https://css-tricks.com/perfect-full-page-background-image/, but expanded to allow for fallback color */
     background-color: rgb(35, 35, 35);
-    background-image: url("img/7IKpeXVMhh-6101.avif"); /* TODO: scale image more realistically */
+    background-image: url("img/homepage-background-SfW-jpeg-80-40prcnt.jpg");
     background-position: center center;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -13,6 +13,11 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+}
+
+/* Serving different sized background images */
+@media only screen and (max-width: 780px) { /* Small Screens */
+
 }
 
 
